@@ -38,12 +38,13 @@ export default function IndividualSendingPage() {
 
   const getTemplateParameters = (template: Template): { key: string; label: string }[] => {
     const params: { key: string; label: string }[] = [];
-    if (template.parameter_1) params.push({ key: 'param_1', label: template.parameter_1 });
-    if (template.parameter_2) params.push({ key: 'param_2', label: template.parameter_2 });
-    if (template.parameter_3) params.push({ key: 'param_3', label: template.parameter_3 });
-    if (template.parameter_4) params.push({ key: 'param_4', label: template.parameter_4 });
-    if (template.parameter_5) params.push({ key: 'param_5', label: template.parameter_5 });
-    if (template.parameter_6) params.push({ key: 'param_6', label: template.parameter_6 });
+    // Use the actual parameter name (lowercase) as the key for Colmeia API
+    if (template.parameter_1) params.push({ key: template.parameter_1.toLowerCase(), label: template.parameter_1 });
+    if (template.parameter_2) params.push({ key: template.parameter_2.toLowerCase(), label: template.parameter_2 });
+    if (template.parameter_3) params.push({ key: template.parameter_3.toLowerCase(), label: template.parameter_3 });
+    if (template.parameter_4) params.push({ key: template.parameter_4.toLowerCase(), label: template.parameter_4 });
+    if (template.parameter_5) params.push({ key: template.parameter_5.toLowerCase(), label: template.parameter_5 });
+    if (template.parameter_6) params.push({ key: template.parameter_6.toLowerCase(), label: template.parameter_6 });
     return params;
   };
 
