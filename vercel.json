@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "framework": "vite",
+  "installCommand": "cd whatsapp-sender && npm install",
+  "buildCommand": "cd whatsapp-sender && npm run build",
+  "outputDirectory": "whatsapp-sender/dist"
+}
