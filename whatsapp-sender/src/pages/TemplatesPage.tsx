@@ -104,11 +104,11 @@ export default function TemplatesPage() {
               className="w-10 h-10 rounded-lg object-cover"
             />
           ) : (
-            <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
               <Image className="w-5 h-5 text-gray-400" />
             </div>
           )}
-          <span className="font-medium text-gray-900">{template.name}</span>
+          <span className="font-medium text-gray-900 dark:text-white">{template.name}</span>
         </div>
       ),
     },
@@ -118,7 +118,7 @@ export default function TemplatesPage() {
       render: (template: Template) => {
         const count = getParameterCount(template);
         return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-whatsapp-light/10 text-whatsapp-dark">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-whatsapp-light/10 text-whatsapp-dark dark:text-whatsapp-light">
             {count} {count === 1 ? 'parâmetro' : 'parâmetros'}
           </span>
         );
@@ -128,7 +128,7 @@ export default function TemplatesPage() {
       key: 'created_at',
       header: 'Criado em',
       render: (template: Template) => (
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-gray-500 dark:text-gray-400">
           {new Date(template.created_at).toLocaleDateString('pt-BR')}
         </span>
       ),
@@ -140,14 +140,14 @@ export default function TemplatesPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => handleEdit(template)}
-            className="p-2 text-gray-400 hover:text-whatsapp-dark hover:bg-whatsapp-light/10 rounded-lg transition-colors"
+            className="p-2 text-gray-400 hover:text-whatsapp-dark dark:hover:text-whatsapp-light hover:bg-whatsapp-light/10 rounded-lg transition-colors"
             title="Editar"
           >
             <Pencil className="w-4 h-4" />
           </button>
           <button
             onClick={() => setDeleteConfirm(template.id)}
-            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
             title="Excluir"
           >
             <Trash2 className="w-4 h-4" />
@@ -163,10 +163,10 @@ export default function TemplatesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               Cadastro de Templates
             </h1>
-            <p className="text-gray-500 mt-1">
+            <p className="text-gray-500 dark:text-gray-400 mt-1">
               Gerencie seus templates de mensagens para WhatsApp
             </p>
           </div>
@@ -180,7 +180,7 @@ export default function TemplatesPage() {
         <Table
           columns={columns}
           data={templates}
-          keyExtractor={(template) => template.id}
+          keyExtractor={(template) => template.id as string}
           loading={loading}
           emptyMessage="Nenhum template cadastrado. Clique em 'Novo Template' para começar."
         />
@@ -215,7 +215,7 @@ export default function TemplatesPage() {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             Tem certeza que deseja excluir este template? Esta ação não pode ser
             desfeita.
           </p>

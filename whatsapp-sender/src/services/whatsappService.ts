@@ -111,14 +111,17 @@ async function getAuthToken(): Promise<string> {
   return generateToken();
 }
 
+// Contact type for Colmeia API
+interface ColmeiaContact {
+  celular: string;
+  [key: string]: string;
+}
+
 /**
  * Send campaign via Colmeia API
  */
 async function sendCampaign(
-  contacts: Array<{
-    celular: string;
-    [key: string]: string;
-  }>
+  contacts: ColmeiaContact[]
 ): Promise<SendMessageResult> {
   console.log("[Colmeia] Sending campaign to", contacts.length, "contacts");
   console.log("[Colmeia] Contact list:", JSON.stringify(contacts, null, 2));
@@ -234,7 +237,7 @@ export const whatsappService = {
       }
 
       // Build contact object with parameters
-      const contact: Record<string, string> = {
+      const contact: ColmeiaContact = {
         celular: cleanPhone,
         ...parameters,
       };
@@ -280,7 +283,7 @@ export const whatsappService = {
           cleanPhone = "55" + cleanPhone;
         }
 
-        const colmeiaContact: Record<string, string> = {
+        const colmeiaContact: ColmeiaContact = {
           celular: cleanPhone,
         };
 

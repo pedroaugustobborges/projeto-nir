@@ -4,13 +4,13 @@
 
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900 antialiased;
+    @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 antialiased transition-colors duration-300;
   }
 }
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-2 px-4 py-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-primary {
@@ -18,7 +18,7 @@
   }
 
   .btn-secondary {
-    @apply btn bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-gray-400;
+    @apply btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 focus:ring-gray-400;
   }
 
   .btn-danger {
@@ -26,11 +26,11 @@
   }
 
   .btn-outline {
-    @apply btn border-2 border-gray-300 bg-transparent hover:bg-gray-100 focus:ring-gray-400;
+    @apply btn border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-gray-400;
   }
 
   .input {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-whatsapp-light focus:border-transparent transition-all duration-200;
+    @apply w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-whatsapp-light focus:border-transparent transition-all duration-200;
   }
 
   .input-error {
@@ -38,40 +38,40 @@
   }
 
   .label {
-    @apply block text-sm font-medium text-gray-700 mb-1;
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1;
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6;
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-300;
   }
 
   .sidebar-link {
-    @apply flex items-center gap-3 px-4 py-3 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-all duration-200;
+    @apply flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-all duration-200;
   }
 
   .sidebar-link-active {
-    @apply bg-whatsapp-light/10 text-whatsapp-dark font-medium;
+    @apply bg-whatsapp-light/10 dark:bg-whatsapp-light/20 text-whatsapp-dark dark:text-whatsapp-light font-medium;
   }
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - Light mode */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  @apply bg-gray-100 dark:bg-gray-800;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  @apply bg-gray-300 dark:bg-gray-600;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1a1a1;
+  @apply bg-gray-400 dark:bg-gray-500;
 }
 
 /* File drop zone animation */
@@ -88,4 +88,16 @@
     border-color: theme('colors.whatsapp.dark');
     background-color: theme('colors.whatsapp.light / 10%');
   }
+}
+
+/* Smooth transitions for dark mode */
+*, *::before, *::after {
+  transition-property: background-color, border-color;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+}
+
+/* Disable transitions on page load */
+.no-transitions * {
+  transition: none !important;
 }

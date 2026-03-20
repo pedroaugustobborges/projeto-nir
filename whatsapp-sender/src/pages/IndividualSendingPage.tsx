@@ -144,14 +144,14 @@ export default function IndividualSendingPage() {
       <div className="max-w-2xl mx-auto space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Disparo Individual</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Disparo Individual</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
             Envie mensagens para um único contato
           </p>
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             <Select
               label="Template"
@@ -174,7 +174,7 @@ export default function IndividualSendingPage() {
 
             {templateParams.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-sm font-medium text-gray-700">
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Parâmetros do Template
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -194,20 +194,20 @@ export default function IndividualSendingPage() {
 
             {selectedTemplate?.image_url && (
               <div className="space-y-2">
-                <h3 className="text-sm font-medium text-gray-700">
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Imagem de Referência
                 </h3>
                 <img
                   src={selectedTemplate.image_url}
                   alt={selectedTemplate.name}
-                  className="max-h-48 rounded-lg border border-gray-200"
+                  className="max-h-48 rounded-lg border border-gray-200 dark:border-gray-700"
                 />
               </div>
             )}
 
-            <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+            <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
               {success && (
-                <div className="flex items-center gap-2 text-green-600">
+                <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
                   <CheckCircle2 className="w-5 h-5" />
                   <span className="text-sm font-medium">Enviado com sucesso!</span>
                 </div>

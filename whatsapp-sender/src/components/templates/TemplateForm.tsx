@@ -119,10 +119,10 @@ export default function TemplateForm({
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-gray-700">
+          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
             Parâmetros Dinâmicos
           </h3>
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
             Preencha o nome de cada variável do template
           </span>
         </div>
@@ -144,7 +144,7 @@ export default function TemplateForm({
         </div>
 
         {visibleParameters < 6 && (
-          <p className="text-xs text-gray-400 italic">
+          <p className="text-xs text-gray-400 dark:text-gray-500 italic">
             Você pode adicionar até 6 parâmetros. Preencha o parâmetro atual para ver o próximo.
           </p>
         )}
@@ -158,7 +158,7 @@ export default function TemplateForm({
         disabled={loading}
       />
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+      <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
         <Button
           type="button"
           variant="outline"

@@ -53,11 +53,11 @@ export default function HistoryPage() {
   const getStatusClass = (status: SendingStatus) => {
     switch (status) {
       case 'success':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
       case 'failed':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400';
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
     }
   };
 
@@ -72,15 +72,15 @@ export default function HistoryPage() {
       render: (item: SendingHistory) => (
         <div className="flex items-center gap-2">
           {item.sending_type === 'individual' ? (
-            <div className="p-1.5 bg-blue-100 rounded-lg">
-              <User className="w-4 h-4 text-blue-600" />
+            <div className="p-1.5 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+              <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </div>
           ) : (
-            <div className="p-1.5 bg-purple-100 rounded-lg">
-              <Users className="w-4 h-4 text-purple-600" />
+            <div className="p-1.5 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+              <Users className="w-4 h-4 text-purple-600 dark:text-purple-400" />
             </div>
           )}
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-gray-600 dark:text-gray-400">
             {item.sending_type === 'individual' ? 'Individual' : 'Em Massa'}
           </span>
         </div>
@@ -90,7 +90,7 @@ export default function HistoryPage() {
       key: 'template_name',
       header: 'Template',
       render: (item: SendingHistory) => (
-        <span className="font-medium text-gray-900">{item.template_name}</span>
+        <span className="font-medium text-gray-900 dark:text-white">{item.template_name}</span>
       ),
     },
     {
@@ -99,17 +99,17 @@ export default function HistoryPage() {
       render: (item: SendingHistory) => (
         <div className="text-sm">
           {item.sending_type === 'individual' ? (
-            <span className="text-gray-600">
+            <span className="text-gray-600 dark:text-gray-400">
               Telefone:{' '}
               <span className="font-mono">
                 {item.phone?.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')}
               </span>
             </span>
           ) : (
-            <span className="text-gray-600">
+            <span className="text-gray-600 dark:text-gray-400">
               {item.total_sent} mensagens enviadas
               {item.description && (
-                <span className="text-gray-400"> • {item.description}</span>
+                <span className="text-gray-400 dark:text-gray-500"> • {item.description}</span>
               )}
             </span>
           )}
@@ -132,7 +132,7 @@ export default function HistoryPage() {
       key: 'created_at',
       header: 'Data/Hora',
       render: (item: SendingHistory) => (
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-gray-500 dark:text-gray-400">
           {new Date(item.created_at).toLocaleString('pt-BR', {
             day: '2-digit',
             month: '2-digit',
@@ -159,8 +159,8 @@ export default function HistoryPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Histórico</h1>
-            <p className="text-gray-500 mt-1">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Histórico</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">
               Visualize o histórico de mensagens enviadas
             </p>
           </div>
@@ -172,25 +172,25 @@ export default function HistoryPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <p className="text-sm text-gray-500">Total</p>
-            <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <p className="text-sm text-gray-500 dark:text-gray-400">Total</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
           </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <p className="text-sm text-gray-500">Individual</p>
-            <p className="text-2xl font-bold text-blue-600">{stats.individual}</p>
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <p className="text-sm text-gray-500 dark:text-gray-400">Individual</p>
+            <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.individual}</p>
           </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <p className="text-sm text-gray-500">Em Massa</p>
-            <p className="text-2xl font-bold text-purple-600">{stats.bulk}</p>
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <p className="text-sm text-gray-500 dark:text-gray-400">Em Massa</p>
+            <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{stats.bulk}</p>
           </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <p className="text-sm text-gray-500">Sucesso</p>
-            <p className="text-2xl font-bold text-green-600">{stats.success}</p>
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <p className="text-sm text-gray-500 dark:text-gray-400">Sucesso</p>
+            <p className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.success}</p>
           </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <p className="text-sm text-gray-500">Falhas</p>
-            <p className="text-2xl font-bold text-red-600">{stats.failed}</p>
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <p className="text-sm text-gray-500 dark:text-gray-400">Falhas</p>
+            <p className="text-2xl font-bold text-red-600 dark:text-red-400">{stats.failed}</p>
           </div>
         </div>
 
@@ -201,7 +201,7 @@ export default function HistoryPage() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === 'all'
                 ? 'bg-whatsapp-light text-white'
-                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
             }`}
           >
             Todos
@@ -211,7 +211,7 @@ export default function HistoryPage() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === 'individual'
                 ? 'bg-blue-500 text-white'
-                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
             }`}
           >
             Individual
@@ -221,7 +221,7 @@ export default function HistoryPage() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === 'bulk'
                 ? 'bg-purple-500 text-white'
-                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
             }`}
           >
             Em Massa
@@ -232,7 +232,7 @@ export default function HistoryPage() {
         <Table
           columns={columns}
           data={filteredHistory}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id as string}
           loading={loading}
           emptyMessage="Nenhum registro encontrado"
         />

@@ -55,7 +55,7 @@ export default function FileUpload({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           {label}
         </label>
       )}
@@ -64,9 +64,9 @@ export default function FileUpload({
         className={`
           relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer
           transition-all duration-200
-          ${isDragActive ? 'border-whatsapp-light bg-whatsapp-light/5' : 'border-gray-300'}
+          ${isDragActive ? 'border-whatsapp-light bg-whatsapp-light/5 dark:bg-whatsapp-light/10' : 'border-gray-300 dark:border-gray-600'}
           ${error ? 'border-red-500' : ''}
-          ${disabled ? 'bg-gray-100 cursor-not-allowed opacity-60' : 'hover:border-whatsapp-light'}
+          ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed opacity-60' : 'hover:border-whatsapp-light'}
         `}
       >
         <input {...getInputProps()} />
@@ -88,7 +88,7 @@ export default function FileUpload({
               </button>
             )}
             {fileName && (
-              <p className="mt-2 text-sm text-gray-600 truncate max-w-xs">
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">
                 {fileName}
               </p>
             )}
@@ -103,12 +103,12 @@ export default function FileUpload({
               )}
             </div>
             <div>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 {isDragActive
                   ? 'Solte o arquivo aqui...'
                   : 'Arraste uma imagem ou clique para selecionar'}
               </p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                 PNG, JPG, GIF ou WEBP (máx. {Math.round(maxSize / 1024 / 1024)}MB)
               </p>
             </div>

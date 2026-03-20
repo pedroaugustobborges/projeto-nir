@@ -17,13 +17,13 @@ export default function Button({
   className = '',
   ...props
 }: ButtonProps) {
-  const baseStyles = 'inline-flex items-center justify-center gap-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseStyles = 'inline-flex items-center justify-center gap-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variantStyles = {
     primary: 'bg-whatsapp-light text-white hover:bg-whatsapp-dark focus:ring-whatsapp-light',
-    secondary: 'bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-gray-400',
+    secondary: 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 focus:ring-gray-400',
     danger: 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500',
-    outline: 'border-2 border-gray-300 bg-transparent hover:bg-gray-100 focus:ring-gray-400',
+    outline: 'border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-gray-400',
   };
 
   const sizeStyles = {

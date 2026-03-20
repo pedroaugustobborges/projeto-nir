@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Send, Download, Upload, AlertCircle, CheckCircle2, X } from 'lucide-react';
+import { Send, Download, Upload, AlertCircle, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Template, CSVRow } from '../types';
 import { templateService } from '../services/templateService';
@@ -15,7 +15,7 @@ export default function BulkSendingPage() {
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvData, setCsvData] = useState<CSVRow[]>([]);
   const [csvErrors, setCsvErrors] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [templatesLoading, setTemplatesLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [sendProgress, setSendProgress] = useState({ sent: 0, total: 0 });
@@ -148,14 +148,14 @@ export default function BulkSendingPage() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Disparo em Massa</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Disparo em Massa</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
             Envie mensagens para múltiplos contatos usando um arquivo CSV
           </p>
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Select
               label="Template"
@@ -192,14 +192,14 @@ export default function BulkSendingPage() {
 
           {/* Errors */}
           {csvErrors.length > 0 && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
                 <div className="space-y-1">
-                  <h4 className="font-medium text-red-800">
+                  <h4 className="font-medium text-red-800 dark:text-red-400">
                     Erros encontrados no CSV
                   </h4>
-                  <ul className="text-sm text-red-700 space-y-1">
+                  <ul className="text-sm text-red-700 dark:text-red-300 space-y-1">
                     {csvErrors.slice(0, 5).map((error, index) => (
                       <li key={index}>{error}</li>
                     ))}
@@ -218,7 +218,7 @@ export default function BulkSendingPage() {
           {csvData.length > 0 && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-medium text-gray-900">
+                <h3 className="font-medium text-gray-900 dark:text-white">
                   Prévia dos Dados ({csvData.length} registros)
                 </h3>
                 <button
@@ -227,23 +227,23 @@ export default function BulkSendingPage() {
                     setCsvData([]);
                     setCsvErrors([]);
                   }}
-                  className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1"
+                  className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 flex items-center gap-1"
                 >
                   <X className="w-4 h-4" />
                   Limpar
                 </button>
               </div>
 
-              <div className="max-h-64 overflow-auto border border-gray-200 rounded-lg">
+              <div className="max-h-64 overflow-auto border border-gray-200 dark:border-gray-700 rounded-lg">
                 <Table
                   columns={previewColumns}
                   data={csvData.slice(0, 10)}
-                  keyExtractor={(_, index) => String(index)}
+                  keyExtractor={(_row, index) => String(index)}
                 />
               </div>
 
               {csvData.length > 10 && (
-                <p className="text-sm text-gray-500 text-center">
+                <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
                   Mostrando 10 de {csvData.length} registros
                 </p>
               )}
@@ -252,19 +252,19 @@ export default function BulkSendingPage() {
 
           {/* Progress */}
           {sending && (
-            <div className="bg-whatsapp-light/10 border border-whatsapp-light/30 rounded-lg p-4">
+            <div className="bg-whatsapp-light/10 dark:bg-whatsapp-light/20 border border-whatsapp-light/30 rounded-lg p-4">
               <div className="flex items-center gap-3">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-whatsapp-dark"></div>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-whatsapp-dark dark:border-whatsapp-light"></div>
                 <div>
-                  <p className="font-medium text-whatsapp-dark">
+                  <p className="font-medium text-whatsapp-dark dark:text-whatsapp-light">
                     Enviando mensagens...
                   </p>
-                  <p className="text-sm text-whatsapp-dark/70">
+                  <p className="text-sm text-whatsapp-dark/70 dark:text-whatsapp-light/70">
                     {sendProgress.sent} de {sendProgress.total} enviadas
                   </p>
                 </div>
               </div>
-              <div className="mt-3 bg-white rounded-full h-2 overflow-hidden">
+              <div className="mt-3 bg-white dark:bg-gray-700 rounded-full h-2 overflow-hidden">
                 <div
                   className="h-full bg-whatsapp-light transition-all duration-300"
                   style={{
@@ -276,7 +276,7 @@ export default function BulkSendingPage() {
           )}
 
           {/* Submit */}
-          <div className="flex justify-end pt-4 border-t border-gray-200">
+          <div className="flex justify-end pt-4 border-t border-gray-200 dark:border-gray-700">
             <Button
               onClick={handleSubmit}
               disabled={csvData.length === 0 || sending}
@@ -289,14 +289,14 @@ export default function BulkSendingPage() {
         </div>
 
         {/* Instructions */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
           <div className="flex items-start gap-3">
             <Upload className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
             <div className="space-y-2">
-              <h4 className="font-medium text-blue-800">
+              <h4 className="font-medium text-blue-800 dark:text-blue-400">
                 Como usar o disparo em massa
               </h4>
-              <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+              <ol className="text-sm text-blue-700 dark:text-blue-300 space-y-1 list-decimal list-inside">
                 <li>Selecione o template que deseja usar</li>
                 <li>Baixe o CSV de exemplo para ver o formato correto</li>
                 <li>Preencha o CSV com os dados dos contatos (máximo 200 linhas)</li>
