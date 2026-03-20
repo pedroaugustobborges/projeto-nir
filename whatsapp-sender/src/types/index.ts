@@ -2,13 +2,13 @@
 export interface Template {
   id: string;
   name: string;
-  parameter_1?: string;
-  parameter_2?: string;
-  parameter_3?: string;
-  parameter_4?: string;
-  parameter_5?: string;
-  parameter_6?: string;
-  image_url?: string;
+  parameter_1?: string | null;
+  parameter_2?: string | null;
+  parameter_3?: string | null;
+  parameter_4?: string | null;
+  parameter_5?: string | null;
+  parameter_6?: string | null;
+  image_url?: string | null;
   created_at: string;
   updated_at: string;
 }
