@@ -6,7 +6,9 @@
       "Bash(python:*)",
       "Bash(npx tsc:*)",
       "Bash(npm run build:*)",
-      "Bash(ping:*)"
+      "Bash(ping:*)",
+      "Bash(del \"C:\\\\Users\\\\16144-pedro\\\\Documents\\\\python_projects\\\\projeto-nir\\\\vercel.json\")",
+      "Bash(del \"C:\\\\Users\\\\16144-pedro\\\\Documents\\\\python_projects\\\\projeto-nir\\\\.vercelignore\")"
     ]
   }
 }
