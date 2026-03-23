@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import LoginPage from '@/pages/LoginPage';
+import DashboardPage from '@/pages/DashboardPage';
 import TemplatesPage from '@/pages/TemplatesPage';
 import IndividualSendingPage from '@/pages/IndividualSendingPage';
 import BulkSendingPage from '@/pages/BulkSendingPage';
@@ -45,7 +46,7 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (!isAdmin) {
-    return <Navigate to="/templates" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;
@@ -71,14 +72,22 @@ function App() {
       <Route
         path="/login"
         element={
-          isAuthenticated ? <Navigate to="/templates" replace /> : <LoginPage />
+          isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />
         }
       />
 
       {/* Protected routes */}
       <Route
         path="/"
-        element={<Navigate to="/templates" replace />}
+        element={<Navigate to="/dashboard" replace />}
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
       />
       <Route
         path="/templates"
@@ -125,10 +134,10 @@ function App() {
         }
       />
 
-      {/* Catch all - redirect to login or templates */}
+      {/* Catch all - redirect to login or dashboard */}
       <Route
         path="*"
-        element={<Navigate to={isAuthenticated ? '/templates' : '/login'} replace />}
+        element={<Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />}
       />
     </Routes>
   );

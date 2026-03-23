@@ -1,5 +1,6 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from "react-router-dom";
 import {
+  LayoutDashboard,
   FileText,
   Send,
   Users,
@@ -9,37 +10,42 @@ import {
   Sun,
   Moon,
   UserCog,
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const navigation = [
   {
-    name: 'Cadastro de Templates',
-    href: '/templates',
+    name: "Dashboard",
+    href: "/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "Cadastro de Templates",
+    href: "/templates",
     icon: FileText,
   },
   {
-    name: 'Disparo Individual',
-    href: '/individual',
+    name: "Disparo Individual",
+    href: "/individual",
     icon: Send,
   },
   {
-    name: 'Disparo em Massa',
-    href: '/bulk',
+    name: "Disparo em Massa",
+    href: "/bulk",
     icon: Users,
   },
   {
-    name: 'Histórico',
-    href: '/history',
+    name: "Histórico",
+    href: "/history",
     icon: History,
   },
 ];
 
 const adminNavigation = [
   {
-    name: 'Usuários',
-    href: '/users',
+    name: "Usuários",
+    href: "/users",
     icon: UserCog,
   },
 ];
@@ -51,14 +57,14 @@ export default function Sidebar() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   const getInitials = (name: string) => {
     return name
-      .split(' ')
+      .split(" ")
       .map((n) => n[0])
-      .join('')
+      .join("")
       .toUpperCase()
       .slice(0, 2);
   };
@@ -72,7 +78,9 @@ export default function Sidebar() {
         </div>
         <div>
           <h1 className="font-bold text-gray-900 dark:text-white">WhatsApp</h1>
-          <p className="text-xs text-gray-500 dark:text-gray-400">Sistema de Disparo</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            Sistema de Disparo
+          </p>
         </div>
       </div>
 
@@ -90,8 +98,8 @@ export default function Sidebar() {
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-all duration-200 ${
                 isActive
-                  ? 'bg-whatsapp-light/10 dark:bg-whatsapp-light/20 text-whatsapp-dark dark:text-whatsapp-light font-medium'
-                  : ''
+                  ? "bg-whatsapp-light/10 dark:bg-whatsapp-light/20 text-whatsapp-dark dark:text-whatsapp-light font-medium"
+                  : ""
               }`
             }
           >
@@ -115,8 +123,8 @@ export default function Sidebar() {
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-all duration-200 ${
                     isActive
-                      ? 'bg-whatsapp-light/10 dark:bg-whatsapp-light/20 text-whatsapp-dark dark:text-whatsapp-light font-medium'
-                      : ''
+                      ? "bg-whatsapp-light/10 dark:bg-whatsapp-light/20 text-whatsapp-dark dark:text-whatsapp-light font-medium"
+                      : ""
                   }`
                 }
               >
@@ -152,15 +160,15 @@ export default function Sidebar() {
         <div className="flex items-center gap-3 px-4 py-2">
           <div className="w-9 h-9 bg-gradient-to-br from-whatsapp-light/20 to-whatsapp-dark/20 dark:from-whatsapp-light/30 dark:to-whatsapp-dark/30 rounded-full flex items-center justify-center">
             <span className="text-sm font-medium text-whatsapp-dark dark:text-whatsapp-light">
-              {user ? getInitials(user.name) : 'U'}
+              {user ? getInitials(user.name) : "U"}
             </span>
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-              {user?.name || 'Usuário'}
+              {user?.name || "Usuário"}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-              {user?.role === 'admin' ? 'Administrador' : 'Usuário'}
+              {user?.role === "admin" ? "Administrador" : "Usuário"}
             </p>
           </div>
         </div>
