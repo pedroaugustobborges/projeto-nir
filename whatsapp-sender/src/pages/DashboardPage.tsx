@@ -94,6 +94,7 @@ export default function DashboardPage() {
   // Filters
   const [selectedHospital, setSelectedHospital] = useState<string>("");
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string>("");
   const [startDate, setStartDate] = useState<string>(
     format(subDays(new Date(), 30), "yyyy-MM-dd"),
   );
@@ -156,6 +157,11 @@ export default function DashboardPage() {
         return false;
       }
 
+      // Type filter
+      if (selectedType && item.sending_type !== selectedType) {
+        return false;
+      }
+
       // Hospital filter (via template)
       if (selectedHospital) {
         const template = data.templates.find((t) => t.id === item.template_id);
@@ -166,7 +172,7 @@ export default function DashboardPage() {
 
       return true;
     });
-  }, [data, selectedHospital, selectedTemplate, startDate, endDate]);
+  }, [data, selectedHospital, selectedTemplate, selectedType, startDate, endDate]);
 
   // Calculate metrics
   const metrics = useMemo(() => {
@@ -293,6 +299,13 @@ export default function DashboardPage() {
     ...data.templates.map((t) => ({ value: t.id, label: t.name })),
   ];
 
+  // Type options for filter
+  const typeOptions = [
+    { value: "", label: "Todos os Tipos" },
+    { value: "individual", label: "Individual" },
+    { value: "bulk", label: "Em Massa" },
+  ];
+
   // Custom tooltip for charts
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
@@ -361,7 +374,7 @@ export default function DashboardPage() {
               Filtros
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <Select
               label="Hospital"
               options={hospitalOptions}
@@ -373,6 +386,12 @@ export default function DashboardPage() {
               options={templateOptions}
               value={selectedTemplate}
               onChange={(e) => setSelectedTemplate(e.target.value)}
+            />
+            <Select
+              label="Tipo"
+              options={typeOptions}
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
             />
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

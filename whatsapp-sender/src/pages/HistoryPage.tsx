@@ -13,20 +13,41 @@ import {
   X,
   Phone,
   Eye,
+  Filter,
 } from "lucide-react";
+import {
+  format,
+  subDays,
+  startOfDay,
+  endOfDay,
+  parseISO,
+  isWithinInterval,
+} from "date-fns";
 import toast from "react-hot-toast";
-import { SendingHistory, SendingStatus, SendingType } from "../types";
-import { historyService } from "../services/historyService";
-import { Button, Table } from "../components/ui";
+import { supabase } from "../services/supabase";
+import { SendingHistory, SendingStatus, Template, HOSPITALS } from "../types";
+import { templateService } from "../services/templateService";
+import { Button, Table, Select } from "../components/ui";
 import Layout from "../components/layout/Layout";
 
 const ITEMS_PER_PAGE_OPTIONS = [10, 50, 100, 500];
 
 export default function HistoryPage() {
   const [history, setHistory] = useState<SendingHistory[]>([]);
+  const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<"all" | SendingType>("all");
   const [selectedItem, setSelectedItem] = useState<SendingHistory | null>(null);
+
+  // Filters
+  const [selectedHospital, setSelectedHospital] = useState<string>("");
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>(
+    format(subDays(new Date(), 30), "yyyy-MM-dd"),
+  );
+  const [endDate, setEndDate] = useState<string>(
+    format(new Date(), "yyyy-MM-dd"),
+  );
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -60,21 +81,33 @@ export default function HistoryPage() {
   };
 
   useEffect(() => {
-    loadHistory();
+    loadData();
   }, []);
 
   // Reset to first page when filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [filter, itemsPerPage]);
+  }, [selectedHospital, selectedTemplate, selectedType, startDate, endDate, itemsPerPage]);
 
-  const loadHistory = async () => {
+  const loadData = async () => {
     try {
       setLoading(true);
-      const data = await historyService.getAll();
-      setHistory(data);
+
+      // Fetch history with template info
+      const { data: historyData, error: historyError } = await supabase
+        .from("sending_history")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (historyError) throw historyError;
+
+      // Fetch templates
+      const templatesData = await templateService.getAll();
+
+      setHistory(historyData || []);
+      setTemplates(templatesData);
     } catch (error) {
-      console.error("Erro ao carregar histórico:", error);
+      console.error("Erro ao carregar dados:", error);
       toast.error("Erro ao carregar histórico");
     } finally {
       setLoading(false);
@@ -114,12 +147,56 @@ export default function HistoryPage() {
     }
   };
 
+  // Filter options
+  const hospitalOptions = [
+    { value: "", label: "Todos os Hospitais" },
+    ...HOSPITALS.map((h) => ({ value: h.id, label: h.name })),
+  ];
+
+  const templateOptions = [
+    { value: "", label: "Todos os Templates" },
+    ...templates.map((t) => ({ value: t.id, label: t.name })),
+  ];
+
+  const typeOptions = [
+    { value: "", label: "Todos os Tipos" },
+    { value: "individual", label: "Individual" },
+    { value: "bulk", label: "Em Massa" },
+  ];
+
   // Filter data
   const filteredHistory = useMemo(() => {
-    return history.filter(
-      (item) => filter === "all" || item.sending_type === filter,
-    );
-  }, [history, filter]);
+    return history.filter((item) => {
+      // Date filter
+      const itemDate = parseISO(item.created_at);
+      const start = startOfDay(parseISO(startDate));
+      const end = endOfDay(parseISO(endDate));
+
+      if (!isWithinInterval(itemDate, { start, end })) {
+        return false;
+      }
+
+      // Template filter
+      if (selectedTemplate && item.template_id !== selectedTemplate) {
+        return false;
+      }
+
+      // Type filter
+      if (selectedType && item.sending_type !== selectedType) {
+        return false;
+      }
+
+      // Hospital filter (via template)
+      if (selectedHospital) {
+        const template = templates.find((t) => t.id === item.template_id);
+        if (!template || template.hospital_id !== selectedHospital) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [history, templates, selectedHospital, selectedTemplate, selectedType, startDate, endDate]);
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredHistory.length / itemsPerPage);
@@ -267,11 +344,11 @@ export default function HistoryPage() {
   ];
 
   const stats = {
-    total: history.length,
-    individual: history.filter((h) => h.sending_type === "individual").length,
-    bulk: history.filter((h) => h.sending_type === "bulk").length,
-    success: history.filter((h) => h.status === "success").length,
-    failed: history.filter((h) => h.status === "failed").length,
+    total: filteredHistory.length,
+    individual: filteredHistory.filter((h) => h.sending_type === "individual").length,
+    bulk: filteredHistory.filter((h) => h.sending_type === "bulk").length,
+    success: filteredHistory.filter((h) => h.status === "success").length,
+    failed: filteredHistory.filter((h) => h.status === "failed").length,
   };
 
   return (
@@ -287,7 +364,7 @@ export default function HistoryPage() {
               Visualize o histórico de mensagens enviadas
             </p>
           </div>
-          <Button variant="outline" onClick={loadHistory} disabled={loading}>
+          <Button variant="outline" onClick={loadData} disabled={loading}>
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
@@ -330,37 +407,55 @@ export default function HistoryPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex gap-2">
-          <button
-            onClick={() => setFilter("all")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filter === "all"
-                ? "bg-whatsapp-light text-white"
-                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
-            }`}
-          >
-            Todos
-          </button>
-          <button
-            onClick={() => setFilter("individual")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filter === "individual"
-                ? "bg-blue-500 text-white"
-                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
-            }`}
-          >
-            Individual
-          </button>
-          <button
-            onClick={() => setFilter("bulk")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filter === "bulk"
-                ? "bg-purple-500 text-white"
-                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
-            }`}
-          >
-            Em Massa
-          </button>
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+          <div className="flex items-center gap-2 mb-4">
+            <Filter className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Filtros
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <Select
+              label="Hospital"
+              options={hospitalOptions}
+              value={selectedHospital}
+              onChange={(e) => setSelectedHospital(e.target.value)}
+            />
+            <Select
+              label="Template"
+              options={templateOptions}
+              value={selectedTemplate}
+              onChange={(e) => setSelectedTemplate(e.target.value)}
+            />
+            <Select
+              label="Tipo"
+              options={typeOptions}
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+            />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Data Inicial
+              </label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-whatsapp-light"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Data Final
+              </label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-whatsapp-light"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Table */}
