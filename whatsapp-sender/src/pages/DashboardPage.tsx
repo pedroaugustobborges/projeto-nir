@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from "react";
 import {
   AreaChart,
   Area,
@@ -13,7 +13,7 @@ import {
   Pie,
   Cell,
   Legend,
-} from 'recharts';
+} from "recharts";
 import {
   Send,
   TrendingUp,
@@ -24,15 +24,22 @@ import {
   Users,
   MessageCircle,
   Building2,
-} from 'lucide-react';
-import { format, subDays, startOfDay, endOfDay, parseISO, isWithinInterval } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import toast from 'react-hot-toast';
-import { supabase } from '../services/supabase';
-import { Template, SendingHistory, HOSPITALS } from '../types';
-import { templateService } from '../services/templateService';
-import { Button, Select } from '../components/ui';
-import Layout from '../components/layout/Layout';
+} from "lucide-react";
+import {
+  format,
+  subDays,
+  startOfDay,
+  endOfDay,
+  parseISO,
+  isWithinInterval,
+} from "date-fns";
+import { ptBR } from "date-fns/locale";
+import toast from "react-hot-toast";
+import { supabase } from "../services/supabase";
+import { Template, SendingHistory, HOSPITALS } from "../types";
+import { templateService } from "../services/templateService";
+import { Button, Select } from "../components/ui";
+import Layout from "../components/layout/Layout";
 
 interface DashboardData {
   history: SendingHistory[];
@@ -57,37 +64,42 @@ interface HospitalChartData {
 
 // Soft color palette - consistent with app theme
 const COLORS = {
-  primary: '#25D366',
-  primaryLight: '#25D36620',
-  secondary: '#128C7E',
+  primary: "#25D366",
+  primaryLight: "#25D36620",
+  secondary: "#128C7E",
   // Hospital colors - soft and distinct
-  hecad: '#10B981',    // Emerald
-  crer: '#3B82F6',     // Blue
-  hds: '#8B5CF6',      // Purple
-  hugol: '#F59E0B',    // Amber
+  hecad: "#10B981", // Emerald
+  crer: "#3B82F6", // Blue
+  hds: "#8B5CF6", // Purple
+  hugol: "#F59E0B", // Amber
 };
 
 // Softer colors for Top Templates ranking
 const RANK_COLORS = [
-  '#10B981', // 1st - Emerald
-  '#3B82F6', // 2nd - Blue
-  '#8B5CF6', // 3rd - Purple
-  '#F59E0B', // 4th - Amber
-  '#EC4899', // 5th - Pink
+  "#10B981", // 1st - Emerald
+  "#3B82F6", // 2nd - Blue
+  "#8B5CF6", // 3rd - Purple
+  "#F59E0B", // 4th - Amber
+  "#EC4899", // 5th - Pink
 ];
 
 export default function DashboardPage() {
-  const [data, setData] = useState<DashboardData>({ history: [], templates: [] });
+  const [data, setData] = useState<DashboardData>({
+    history: [],
+    templates: [],
+  });
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   // Filters
-  const [selectedHospital, setSelectedHospital] = useState<string>('');
-  const [selectedTemplate, setSelectedTemplate] = useState<string>('');
+  const [selectedHospital, setSelectedHospital] = useState<string>("");
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [startDate, setStartDate] = useState<string>(
-    format(subDays(new Date(), 30), 'yyyy-MM-dd')
+    format(subDays(new Date(), 30), "yyyy-MM-dd"),
   );
-  const [endDate, setEndDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
+  const [endDate, setEndDate] = useState<string>(
+    format(new Date(), "yyyy-MM-dd"),
+  );
 
   useEffect(() => {
     loadData();
@@ -99,9 +111,9 @@ export default function DashboardPage() {
 
       // Fetch history with template info
       const { data: historyData, error: historyError } = await supabase
-        .from('sending_history')
-        .select('*, templates(hospital_id)')
-        .order('created_at', { ascending: false });
+        .from("sending_history")
+        .select("*, templates(hospital_id)")
+        .order("created_at", { ascending: false });
 
       if (historyError) throw historyError;
 
@@ -113,8 +125,8 @@ export default function DashboardPage() {
         templates,
       });
     } catch (error) {
-      console.error('Erro ao carregar dados:', error);
-      toast.error('Erro ao carregar dados do dashboard');
+      console.error("Erro ao carregar dados:", error);
+      toast.error("Erro ao carregar dados do dashboard");
     } finally {
       setLoading(false);
     }
@@ -124,7 +136,7 @@ export default function DashboardPage() {
     setRefreshing(true);
     await loadData();
     setRefreshing(false);
-    toast.success('Dados atualizados!');
+    toast.success("Dados atualizados!");
   };
 
   // Filter data based on selections
@@ -160,19 +172,29 @@ export default function DashboardPage() {
   const metrics = useMemo(() => {
     const totalMessages = filteredHistory.reduce(
       (sum, item) => sum + (item.total_sent || 1),
-      0
+      0,
     );
     const totalSends = filteredHistory.length;
     const individualSends = filteredHistory.filter(
-      (h) => h.sending_type === 'individual'
+      (h) => h.sending_type === "individual",
     ).length;
-    const bulkSends = filteredHistory.filter((h) => h.sending_type === 'bulk').length;
+    const bulkSends = filteredHistory.filter(
+      (h) => h.sending_type === "bulk",
+    ).length;
     const successRate =
       totalSends > 0
-        ? (filteredHistory.filter((h) => h.status === 'success').length / totalSends) * 100
+        ? (filteredHistory.filter((h) => h.status === "success").length /
+            totalSends) *
+          100
         : 0;
 
-    return { totalMessages, totalSends, individualSends, bulkSends, successRate };
+    return {
+      totalMessages,
+      totalSends,
+      individualSends,
+      bulkSends,
+      successRate,
+    };
   }, [filteredHistory]);
 
   // Prepare chart data (last 30 days)
@@ -182,19 +204,19 @@ export default function DashboardPage() {
 
     for (let i = days - 1; i >= 0; i--) {
       const date = subDays(new Date(), i);
-      const dateStr = format(date, 'yyyy-MM-dd');
+      const dateStr = format(date, "yyyy-MM-dd");
       const dayData = filteredHistory.filter(
-        (h) => format(parseISO(h.created_at), 'yyyy-MM-dd') === dateStr
+        (h) => format(parseISO(h.created_at), "yyyy-MM-dd") === dateStr,
       );
 
       result.push({
-        date: format(date, 'dd/MM', { locale: ptBR }),
+        date: format(date, "dd/MM", { locale: ptBR }),
         total: dayData.reduce((sum, h) => sum + (h.total_sent || 1), 0),
         individual: dayData
-          .filter((h) => h.sending_type === 'individual')
+          .filter((h) => h.sending_type === "individual")
           .reduce((sum, h) => sum + (h.total_sent || 1), 0),
         bulk: dayData
-          .filter((h) => h.sending_type === 'bulk')
+          .filter((h) => h.sending_type === "bulk")
           .reduce((sum, h) => sum + (h.total_sent || 1), 0),
       });
     }
@@ -209,10 +231,10 @@ export default function DashboardPage() {
 
     for (let i = days - 1; i >= 0; i--) {
       const date = subDays(new Date(), i);
-      const dateStr = format(date, 'yyyy-MM-dd');
+      const dateStr = format(date, "yyyy-MM-dd");
 
       const dayEntry: HospitalChartData = {
-        date: format(date, 'dd/MM', { locale: ptBR }),
+        date: format(date, "dd/MM", { locale: ptBR }),
         HECAD: 0,
         CRER: 0,
         HDS: 0,
@@ -221,14 +243,17 @@ export default function DashboardPage() {
 
       // Count messages per hospital for this day
       data.history.forEach((h) => {
-        if (format(parseISO(h.created_at), 'yyyy-MM-dd') !== dateStr) return;
+        if (format(parseISO(h.created_at), "yyyy-MM-dd") !== dateStr) return;
 
         const template = data.templates.find((t) => t.id === h.template_id);
         if (!template?.hospital_id) return;
 
-        const hospitalName = HOSPITALS.find((hosp) => hosp.id === template.hospital_id)?.name;
+        const hospitalName = HOSPITALS.find(
+          (hosp) => hosp.id === template.hospital_id,
+        )?.name;
         if (hospitalName && dayEntry[hospitalName] !== undefined) {
-          dayEntry[hospitalName] = (dayEntry[hospitalName] as number) + (h.total_sent || 1);
+          dayEntry[hospitalName] =
+            (dayEntry[hospitalName] as number) + (h.total_sent || 1);
         }
       });
 
@@ -258,13 +283,13 @@ export default function DashboardPage() {
 
   // Hospital options for filter
   const hospitalOptions = [
-    { value: '', label: 'Todos os Hospitais' },
+    { value: "", label: "Todos os Hospitais" },
     ...HOSPITALS.map((h) => ({ value: h.id, label: h.name })),
   ];
 
   // Template options for filter
   const templateOptions = [
-    { value: '', label: 'Todos os Templates' },
+    { value: "", label: "Todos os Templates" },
     ...data.templates.map((t) => ({ value: t.id, label: t.name })),
   ];
 
@@ -273,7 +298,9 @@ export default function DashboardPage() {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
-          <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">{label}</p>
+          <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">
+            {label}
+          </p>
           {payload.map((entry: any, index: number) => (
             <p key={index} className="text-sm" style={{ color: entry.color }}>
               {entry.name}: <span className="font-semibold">{entry.value}</span>
@@ -291,7 +318,9 @@ export default function DashboardPage() {
         <div className="flex items-center justify-center h-96">
           <div className="flex flex-col items-center gap-4">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-whatsapp-light"></div>
-            <p className="text-gray-500 dark:text-gray-400">Carregando dashboard...</p>
+            <p className="text-gray-500 dark:text-gray-400">
+              Carregando dashboard...
+            </p>
           </div>
         </div>
       </Layout>
@@ -304,9 +333,11 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Dashboard
+            </h1>
             <p className="text-gray-500 dark:text-gray-400 mt-1">
-              Visao geral dos disparos de mensagens
+              Visão geral dos disparos de mensagens
             </p>
           </div>
           <Button
@@ -315,7 +346,9 @@ export default function DashboardPage() {
             disabled={refreshing}
             className="self-start sm:self-auto"
           >
-            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw
+              className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`}
+            />
             Atualizar
           </Button>
         </div>
@@ -324,7 +357,9 @@ export default function DashboardPage() {
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 mb-4">
             <Filter className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-            <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Filtros</h2>
+            <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Filtros
+            </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <Select
@@ -370,9 +405,11 @@ export default function DashboardPage() {
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total de Mensagens</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                  Total de Mensagens
+                </p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
-                  {metrics.totalMessages.toLocaleString('pt-BR')}
+                  {metrics.totalMessages.toLocaleString("pt-BR")}
                 </p>
               </div>
               <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center">
@@ -389,9 +426,11 @@ export default function DashboardPage() {
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total de Disparos</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                  Total de Disparos
+                </p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
-                  {metrics.totalSends.toLocaleString('pt-BR')}
+                  {metrics.totalSends.toLocaleString("pt-BR")}
                 </p>
               </div>
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
@@ -412,8 +451,12 @@ export default function DashboardPage() {
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Taxa de Sucesso</p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{metrics.successRate.toFixed(1)}%</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                  Taxa de Sucesso
+                </p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
+                  {metrics.successRate.toFixed(1)}%
+                </p>
               </div>
               <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center">
                 <TrendingUp className="w-6 h-6 text-purple-600 dark:text-purple-400" />
@@ -433,8 +476,12 @@ export default function DashboardPage() {
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Templates Utilizados</p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{topTemplates.length}</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                  Templates Utilizados
+                </p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
+                  {topTemplates.length}
+                </p>
               </div>
               <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center">
                 <FileText className="w-6 h-6 text-amber-600 dark:text-amber-400" />
@@ -457,17 +504,21 @@ export default function DashboardPage() {
                   Mensagens por Dia
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Ultimos 30 dias
+                  Últimos 30 dias
                 </p>
               </div>
               <div className="flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                  <span className="text-gray-600 dark:text-gray-400">Individual</span>
+                  <span className="text-gray-600 dark:text-gray-400">
+                    Individual
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-purple-500" />
-                  <span className="text-gray-600 dark:text-gray-400">Em Massa</span>
+                  <span className="text-gray-600 dark:text-gray-400">
+                    Em Massa
+                  </span>
                 </div>
               </div>
             </div>
@@ -475,7 +526,13 @@ export default function DashboardPage() {
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData}>
                   <defs>
-                    <linearGradient id="colorIndividual" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient
+                      id="colorIndividual"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
                       <stop offset="5%" stopColor="#10B981" stopOpacity={0.2} />
                       <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
                     </linearGradient>
@@ -484,7 +541,11 @@ export default function DashboardPage() {
                       <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" opacity={0.5} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#E5E7EB"
+                    opacity={0.5}
+                  />
                   <XAxis
                     dataKey="date"
                     stroke="#9CA3AF"
@@ -541,7 +602,7 @@ export default function DashboardPage() {
                       className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-semibold"
                       style={{
                         backgroundColor: `${RANK_COLORS[index % RANK_COLORS.length]}15`,
-                        color: RANK_COLORS[index % RANK_COLORS.length]
+                        color: RANK_COLORS[index % RANK_COLORS.length],
                       }}
                     >
                       {index + 1}
@@ -561,7 +622,7 @@ export default function DashboardPage() {
                       </div>
                     </div>
                     <span className="text-sm font-semibold text-gray-600 dark:text-gray-400">
-                      {template.count.toLocaleString('pt-BR')}
+                      {template.count.toLocaleString("pt-BR")}
                     </span>
                   </div>
                 ))}
@@ -586,14 +647,18 @@ export default function DashboardPage() {
                   Mensagens por Hospital
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Ultimos 14 dias
+                  Últimos 14 dias
                 </p>
               </div>
             </div>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={hospitalChartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" opacity={0.5} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#E5E7EB"
+                    opacity={0.5}
+                  />
                   <XAxis
                     dataKey="date"
                     stroke="#9CA3AF"
@@ -609,7 +674,7 @@ export default function DashboardPage() {
                   />
                   <Tooltip content={<CustomTooltip />} />
                   <Legend
-                    wrapperStyle={{ fontSize: '12px' }}
+                    wrapperStyle={{ fontSize: "12px" }}
                     iconType="circle"
                     iconSize={8}
                   />
@@ -658,10 +723,10 @@ export default function DashboardPage() {
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Distribuicao por Tipo
+                Distribuição por Tipo
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Proporcao de disparos
+                Proporção de disparos
               </p>
             </div>
             <div className="h-64 flex items-center justify-center">
@@ -670,8 +735,8 @@ export default function DashboardPage() {
                   <PieChart>
                     <Pie
                       data={[
-                        { name: 'Individual', value: metrics.individualSends },
-                        { name: 'Em Massa', value: metrics.bulkSends },
+                        { name: "Individual", value: metrics.individualSends },
+                        { name: "Em Massa", value: metrics.bulkSends },
                       ]}
                       cx="50%"
                       cy="50%"
