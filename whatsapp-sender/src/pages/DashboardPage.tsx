@@ -418,7 +418,7 @@ export default function DashboardPage() {
             </div>
             <div className="mt-4 flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm">
               <TrendingUp className="w-4 h-4 text-emerald-500" />
-              <span>Periodo selecionado</span>
+              <span>Período selecionado</span>
             </div>
           </div>
 
@@ -489,7 +489,7 @@ export default function DashboardPage() {
             </div>
             <div className="mt-4 flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm">
               <Calendar className="w-4 h-4 text-amber-500" />
-              <span>No periodo selecionado</span>
+              <span>No período selecionado</span>
             </div>
           </div>
         </div>
@@ -591,7 +591,7 @@ export default function DashboardPage() {
                 Top Templates
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Mais utilizados no periodo
+                Mais utilizados no período
               </p>
             </div>
             {topTemplates.length > 0 ? (
@@ -630,7 +630,7 @@ export default function DashboardPage() {
             ) : (
               <div className="flex flex-col items-center justify-center h-48 text-gray-400 dark:text-gray-500">
                 <FileText className="w-12 h-12 mb-2 opacity-50" />
-                <p className="text-sm">Nenhum dado no periodo</p>
+                <p className="text-sm">Nenhum dado no período</p>
               </div>
             )}
           </div>
@@ -754,7 +754,7 @@ export default function DashboardPage() {
               ) : (
                 <div className="flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
                   <Users className="w-12 h-12 mb-2 opacity-50" />
-                  <p className="text-sm">Nenhum dado no periodo</p>
+                  <p className="text-sm">Nenhum dado no período</p>
                 </div>
               )}
             </div>
