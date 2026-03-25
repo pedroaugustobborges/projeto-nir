@@ -199,7 +199,7 @@ export default function LoginPage() {
           {/* Footer */}
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              HECAD - Hospital Estadual da Criança e do Adolescente
+              Associação de Gestão, Inovação e Resultados em Saúde
             </p>
           </div>
         </div>
