@@ -80,11 +80,11 @@ export default function Sidebar() {
         </div>{" "}
         <div>
           {" "}
-          <h1 className="font-bold text-gray-900 dark:text-white">
-            WhatsApp
+          <h1 className="text-center font-bold text-gray-900 dark:text-white">
+            SDW
           </h1>{" "}
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            Sistema de Disparo
+          <p className=" text-center text-xs text-gray-500 dark:text-gray-400">
+            Sistema de Disparo de Whatsapp
           </p>{" "}
         </div>{" "}
       </div>
