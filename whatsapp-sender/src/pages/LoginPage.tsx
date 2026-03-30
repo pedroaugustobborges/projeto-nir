@@ -204,12 +204,24 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Copyright */}
-        <p className="text-center text-sm text-gray-400 dark:text-gray-500 mt-6">
-          &copy; {new Date().getFullYear()} Agir Saúde. Todos os direitos
-          reservados. <br />
-          Powered by daher.lab
-        </p>
+        {/* Copyright & Branding Bottom */}
+        <div className="mt-6 flex flex-col items-center gap-3">
+          {/* <p className="text-center text-sm text-gray-400 dark:text-gray-500">
+            &copy; {new Date().getFullYear()} Agir Saúde. Todos os direitos
+            reservados.
+          </p> */}
+
+          <div className="flex items-center justify-center gap-2 text-sm text-gray-400 dark:text-gray-500">
+            <span className="font-medium">
+              Powered by <br />
+            </span>
+            <img
+              src="/logodaagir.png"
+              alt="Logo Agir Saúde"
+              className="max-w-[85px] h-auto opacity-80 transition-all dark:brightness-0 dark:invert"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
