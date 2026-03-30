@@ -198,9 +198,13 @@ export default function LoginPage() {
 
           {/* Footer */}
           <div className="mt-8 text-center">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Associação de Gestão, Inovação e Resultados em Saúde
+            <p className="text-center text-sm text-gray-400 dark:text-gray-500">
+              &copy; {new Date().getFullYear()} Agir Saúde. <br /> Todos os
+              direitos reservados.
             </p>
+            {/* <p className="text-sm text-gray-500 dark:text-gray-400">
+              Associação de Gestão, Inovação e Resultados em Saúde
+            </p> */}
           </div>
         </div>
 
