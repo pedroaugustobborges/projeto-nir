@@ -14,7 +14,7 @@ import { templateService } from "../services/templateService";
 import { whatsappService } from "../services/whatsappService";
 import { historyService } from "../services/historyService";
 import { useAuth } from "../contexts/AuthContext";
-import { Button, Input, Select } from "../components/ui";
+import { Button, Input, Select, ImageThumbnail } from "../components/ui";
 import Layout from "../components/layout/Layout";
 
 interface SendError {
@@ -350,10 +350,10 @@ export default function IndividualSendingPage() {
                 <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Imagem de Referência
                 </h3>
-                <img
-                  src={selectedTemplate.image_url}
+                <ImageThumbnail
+                  imageUrl={selectedTemplate.image_url}
                   alt={selectedTemplate.name}
-                  className="max-h-48 rounded-lg border border-gray-200 dark:border-gray-700"
+                  title={selectedTemplate.name}
                 />
               </div>
             )}
